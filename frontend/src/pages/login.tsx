@@ -19,7 +19,7 @@ const Login = ()=> {
   const handleSubmit = async (e:any) => {
     e.preventDefault();
     try {
-      dispatch(loginStart)
+      dispatch(loginStart())
       const res = await fetch('/api/auth/signin', {
         method: 'POST',
         headers: {
@@ -28,12 +28,12 @@ const Login = ()=> {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      console.log(data);
+      // console.log(data);
       if (data.success === false) {
         dispatch(loginFailure(data.message))
         return;
       }
-      dispatch(loginSuccess(data.user))
+      dispatch(loginSuccess(data))
       navigate('/');
     } catch (error :any ) {
       dispatch(loginFailure(error.message))
