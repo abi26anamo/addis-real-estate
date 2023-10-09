@@ -7,6 +7,7 @@ import Header from "./components/Header";
 import Register from "./pages/register";
 import About from "./pages/About";
 import PrivateRouter from "./components/PrivateRouter";
+import Listing from "./pages/Listing";
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
         <Route path="/logout" element={<Logout />}></Route>
         <Route element={<PrivateRouter />}>
           <Route path="/profile" element={<Profile />}></Route>
+          <Route path="/create-listing" element={<Listing />}></Route>
         </Route>
         <Route path="/register" element={<Register />}></Route>
       </Routes>
