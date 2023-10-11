@@ -54,7 +54,7 @@ const Listing = () => {
             imageUrls: formData.imageUrls.concat(urls as string[]),
           });
           setUploadError(false);
-t        })
+     })
         .catch((err: any) => {
           setUploadError("Image upload failed(2MB max per image)");
         });
