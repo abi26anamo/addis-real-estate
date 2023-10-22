@@ -8,6 +8,7 @@ import Register from "./pages/register";
 import About from "./pages/About";
 import PrivateRouter from "./components/PrivateRouter";
 import Listing from "./pages/Listing";
+import UpdateListing from "./pages/updateListing";
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
         <Route element={<PrivateRouter />}>
           <Route path="/profile" element={<Profile />}></Route>
           <Route path="/create-listing" element={<Listing />}></Route>
+          <Route path="/update-listing/:id" element={<UpdateListing />}></Route>
         </Route>
         <Route path="/register" element={<Register />}></Route>
       </Routes>

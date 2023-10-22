@@ -69,6 +69,22 @@ const Profile = () => {
     );
   };
 
+  const handleListingDelete = async (id: string) => {
+    try {
+      const res = await fetch(`/api/listing/delete/${id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        console.log(data.message);
+        return;
+      }
+      setListings(listings.filter((listing: any) => listing._id !== id));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleListings = async () => {
     try {
       setListingError(false);
@@ -229,7 +245,7 @@ const Profile = () => {
       </button>
       <p>{listingError ? "Error showing listings" : ""}</p>
       {listings && listings.length > 0 && (
-        <div className="flex flex-col gap-4 mt-5">
+        <div className="flex flex-col gap-4 m-7">
           <h1 className="text-center font-semibold text-2xl">Your Listings</h1>{" "}
           {listings.map((listing: any) => (
             <div
@@ -250,8 +266,15 @@ const Profile = () => {
                 <p>{listing.name}</p>
               </Link>
               <div className="flex flex-col">
-                <button className="text-red-700 uppercase">Delete</button>
-                <button className="text-green-700 uppercase">Edit</button>
+                <button
+                  onClick={() => handleListingDelete(listing._id)}
+                  className="text-red-700 uppercase"
+                >
+                  Delete
+                </button>
+                <Link to={`/update-listing/${listing._id}`}>
+                  <button className='text-green-700 uppercase'>Edit</button>
+                </Link>
               </div>
             </div>
           ))}
