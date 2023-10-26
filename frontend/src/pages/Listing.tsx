@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore from "swiper";
 import { Navigation } from "swiper/modules";
+import { useSelector } from "react-redux";
 import "swiper/css/bundle";
 import {
   FaShare,
@@ -12,6 +13,8 @@ import {
   FaChair,
   FaParking,
 } from "react-icons/fa";
+import ContactForm from "../components/ContactForm";
+import { list } from "firebase/storage";
 
 interface ListingData {
   id: string;
@@ -27,16 +30,18 @@ interface ListingData {
   bathrooms: number;
   parking: boolean;
   furnished: boolean;
+  userRef: string;
 }
 
 const Listing = () => {
   SwiperCore.use([Navigation]);
+  const { currentUser } = useSelector((state: any) => state.user);
   const params = useParams();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [listing, setListing] = useState<ListingData | null>(null);
   const [copied, setCopied] = useState(false);
-
+  const [contactClicked, setContactClicked] = useState(false);
   useEffect(() => {
     const fetchListing = async () => {
       try {
@@ -149,6 +154,12 @@ const Listing = () => {
             {listing && listing.furnished ? "Furnished" : "Unfurnished"}
           </li>
         </ul>
+        {currentUser && currentUser._id  !== listing?.userRef && !contactClicked && (
+          <button onClick={()=>setContactClicked(true)} className="bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 p-3">
+            Contact Owner
+          </button>
+        )}
+        {contactClicked && <ContactForm listing={listing } />}
       </div>
     </main>
   );
