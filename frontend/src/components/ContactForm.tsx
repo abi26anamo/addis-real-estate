@@ -1,4 +1,3 @@
-import { string } from "joi";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -66,4 +65,4 @@ const ContactForm = ({ listing }: { listing: ListingData }) => {
     </>
   );
 };
-export default ContactForm;
+export default ContactForm;      
