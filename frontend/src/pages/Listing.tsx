@@ -14,7 +14,6 @@ import {
   FaParking,
 } from "react-icons/fa";
 import ContactForm from "../components/ContactForm";
-import { list } from "firebase/storage";
 
 interface ListingData {
   id: string;
