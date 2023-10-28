@@ -64,9 +64,9 @@ const Home = () => {
     <div>
       <div className="flex flex-col gap-6 py-28 px-3 max-w-6xl mx-auto">
         <h1 className="text-slate-700 font-bold text-3xl lg:text-6xl">
-          Find your next <span className="text-slate-500">perfect</span>
+          Welcome to <span className="text-slate-500">Addis RealEstate</span>
           <br />
-          place with ease
+          <span className="text-slate-700">Find your dream home</span>
         </h1>
         <p className="text-slate-700 text-xs sm:text-sm">
           Gift Real Estate is a real estate company that offers a wide range of
