@@ -1,11 +1,28 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import ListingCard from "../components/ListingCard";
+
+interface Listing {
+  _id: string;
+  name: string;
+  address: string;
+  description: string;
+  imageUrls: string[];
+  regularPrice: number;
+  discountPrice: number;
+  type: string;
+  bedrooms: number;
+  bathrooms: number;
+  offer: boolean;
+}
 
 const Search = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [listing, setListing] = useState([]);
+  const [listings, setListing] = useState([]);
+  const [showMore, setShowMore] = useState(false);
+
   const [formData, setFormData] = useState({
     searchTerm: "",
     type: "all",
@@ -34,7 +51,6 @@ const Search = () => {
       offerFromUrl ||
       sortFromUrl ||
       orderFromUrl
-      
     ) {
       setFormData({
         ...formData,
@@ -49,18 +65,20 @@ const Search = () => {
     }
 
     const fetchListing = async () => {
+      setShowMore(false); 
       setLoading(true);
       const searchQuery = urlParams.toString();
-      const res = await fetch(`/api/listings/get?${searchQuery}`);
+      const res = await fetch(`/api/listing/get?${searchQuery}`);
       const data = await res.json();
-      
+      if (data.length > 8) {
+        setShowMore(true);
+      }
+
       setListing(data);
-      setLoading(false);     
-    }
+      setLoading(false);
+    };
     fetchListing();
   }, [location.search]);
-
-  
 
   const handleChange = (e: any) => {
     if (
@@ -72,7 +90,7 @@ const Search = () => {
     }
 
     if (e.target.id === "searchTerm") {
-      setFormData({ ...formData, searchTerm: e.target.value});
+      setFormData({ ...formData, searchTerm: e.target.value });
     }
 
     if (
@@ -106,6 +124,20 @@ const Search = () => {
     urlParams.set("order", formData.order);
     const searchQuery = urlParams.toString();
     navigate(`/search?${searchQuery}`);
+  };
+
+  const onShowMoreClicked =async () => {
+    const numberofListings = listings.length;
+    const startIndex = numberofListings;
+    const urlparams = new URLSearchParams(location.search);
+    urlparams.set("startIndex", startIndex.toString());
+    const searchQuery = urlparams.toString();
+    const res = await fetch(`/api/listing/get?${searchQuery}`);
+    const data = await res.json();
+    if (data.length < 9) {
+      setShowMore(false);
+    }
+    setListing({ ...listings, ...data });
   };
 
   return (
@@ -214,6 +246,29 @@ const Search = () => {
         <h1 className="text-3xl font-semibold border-b text-slate-700 p-3 mt-5">
           Listing items:
         </h1>
+        <div className="p-7 flex flex-wrap gap-4">
+          {!loading && listings.length === 0 && (
+            <p className="text-xl text-slate-700 p-3">No listings found</p>
+          )}
+          {loading && (
+            <p className="text-xl text-center text-slate-700 p-3 w-full">
+              Loading...
+            </p>
+          )}
+          {!loading &&
+            listings &&
+            (listings as Listing[]).map((listing) => (
+              <ListingCard key={listing?._id} listing={listing} />
+            ))}
+          {
+           showMore && (<button
+              onClick={onShowMoreClicked}
+              className="text-green-700 hover:underline p-7 text-center w-full"
+            >
+              Show More
+            </button>)
+          }
+        </div>
       </div>
     </div>
   );
