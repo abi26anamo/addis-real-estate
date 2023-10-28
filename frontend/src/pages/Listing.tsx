@@ -15,21 +15,21 @@ import {
 } from "react-icons/fa";
 import ContactForm from "../components/ContactForm";
 
-interface ListingData {
-  id: string;
+interface Listing {
   name: string;
-  description: string;
-  regularPrice: string;
-  discountPrice: string;
-  imageUrls: string[];
   offer: boolean;
-  type: "rent" | "sale";
+  discountPrice: number;
+  regularPrice: number;
+  type: string;
   address: string;
+  description: string;
+  imageUrls: string[];
   bedrooms: number;
   bathrooms: number;
   parking: boolean;
   furnished: boolean;
   userRef: string;
+  listing: any;
 }
 
 const Listing = () => {
@@ -38,7 +38,7 @@ const Listing = () => {
   const params = useParams();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [listing, setListing] = useState<ListingData | null>(null);
+  const [listing, setListing] = useState<Listing | null>(null);
   const [copied, setCopied] = useState(false);
   const [contactClicked, setContactClicked] = useState(false);
   useEffect(() => {
@@ -153,12 +153,17 @@ const Listing = () => {
             {listing && listing.furnished ? "Furnished" : "Unfurnished"}
           </li>
         </ul>
-        {currentUser && currentUser._id  !== listing?.userRef && !contactClicked && (
-          <button onClick={()=>setContactClicked(true)} className="bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 p-3">
-            Contact Owner
-          </button>
-        )}
-        {contactClicked && <ContactForm listing={listing } />}
+        {currentUser &&
+          currentUser._id !== listing?.userRef &&
+          !contactClicked && (
+            <button
+              onClick={() => setContactClicked(true)}
+              className="bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 p-3"
+            >
+              Contact Owner
+            </button>
+          )}
+        {listing && contactClicked && <ContactForm listing={listing} />}
       </div>
     </main>
   );

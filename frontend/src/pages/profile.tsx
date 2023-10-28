@@ -35,9 +35,7 @@ const Profile = () => {
   const [uploadpercent, setUploadPercent] = useState(0);
   const [listings, setListings] = useState([]);
   const [formData, setFormData] = useState<FormDataState>({ avatar: "" });
-  console.log("upload percent", uploadpercent);
-  console.log(file);
-  console.log("fromdata", formData);
+
 
   useEffect(() => {
     if (file) {
@@ -60,6 +58,8 @@ const Profile = () => {
       },
       (error) => {
         setUploadError(true);
+        console.log(error);
+        
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) =>
@@ -96,6 +96,7 @@ const Profile = () => {
       }
       setListings(data);
     } catch (error) {
+      console.log(error);
       setListingError(true);
     }
   };
